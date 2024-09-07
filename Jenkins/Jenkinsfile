@@ -1,0 +1,66 @@
+pipeline {
+    agent any
+
+    environment {
+        PROJECT_ID = 'blissful-racer-425921-i5'
+        COMPUTE_INSTANCE_NAME = 'web-instance'
+        ZONE = 'us-central1-a'
+        GIT_REPO_URL = 'https://github.com/paramv10/Gravity-DevOps-Assignment.git'
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git url: "${GIT_REPO_URL}"
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building application'
+                sh 'mvm clean install' 
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests'
+                sh ' mvn test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application'
+                
+                // Replace <your-bucket> and <source-path> with actual bucket and path details
+                sh """
+                gcloud compute ssh ...copy the code in folder /var/www/html/myapp
+                
+                """
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                echo 'Verifying deployment...'
+                sh "curl http://${COMPUTE_INSTANCE_NAME}"
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up...'
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
+
+
+
