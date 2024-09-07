@@ -48,7 +48,13 @@ pipeline {
             }
         }
     }
-
+        stage('Monitor') {
+            steps {
+                script {
+                    echo "Configure Google Cloud Monitoring and Alerts manually via gcloud commands"
+                }
+            }
+        }
     post {
         always {
             echo 'Cleaning up...'
